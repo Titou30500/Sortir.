@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172B3A">
+  <meta name="description" content="SORTIR. Découvre. Partage. Profite.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="styles.css">
+  <title>SORTIR.</title>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="SORTIR accueil">SORTIR<span>.</span><small data-i18n="tagline">DÉCOUVRE. PARTAGE. PROFITE.</small></a>
+    <label class="language"><span class="sr-only" data-i18n="language">Langue</span>
+      <select id="language" aria-label="Language">
+        <option value="fr">🇫🇷 Français</option><option value="en">🇬🇧 English</option>
+        <option value="es">🇪🇸 Español</option><option value="de">🇩🇪 Deutsch</option>
+        <option value="it">🇮🇹 Italiano</option><option value="nl">🇳🇱 Nederlands</option>
+      </select>
+    </label>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow" data-i18n="eyebrow">TES PROCHAINES BONNES IDÉES COMMENCENT ICI</p>
+      <h1 data-i18n="headline">On sort où aujourd'hui&nbsp;?</h1>
+      <p class="intro" data-i18n="intro">Trouve une activité, une belle adresse ou une idée de sortie près de toi.</p>
+      <div class="search">
+        <span aria-hidden="true">⌕</span>
+        <input id="search" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="Une activité, un lieu, une envie…">
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading"><h2 data-i18n="categories">Que veux-tu faire&nbsp;?</h2></div>
+      <div class="categories" id="categories">
+        <button class="category active" data-category="all"><span>✨</span><b data-i18n="all">Tout</b></button>
+        <button class="category" data-category="nature"><span>🌳</span><b data-i18n="nature">Nature</b></button>
+        <button class="category" data-category="fun"><span>🎳</span><b data-i18n="fun">Loisirs</b></button>
+        <button class="category" data-category="food"><span>🍽️</span><b data-i18n="food">Restaurants</b></button>
+        <button class="category" data-category="culture"><span>🎭</span><b data-i18n="culture">Culture</b></button>
+        <button class="category" data-category="sport"><span>🏊</span><b data-i18n="sport">Sports</b></button>
+      </div>
+    </section>
+
+    <section class="section map-section">
+      <div class="section-heading"><h2 data-i18n="nearby">Autour de toi</h2><span class="pill" data-i18n="pilot">France entière</span></div>
+      <div id="live-map" class="live-map" role="region" aria-label="Carte interactive des idées de sortie"></div>
+      <div class="map-actions"><button id="locate-me" class="location-button" type="button">◎ Me localiser</button><label class="radius-control" for="search-radius">Distance <select id="search-radius"><option value="3">3 km</option><option value="5" selected>5 km</option><option value="10">10 km</option><option value="20">20 km</option><option value="30">30 km</option></select></label><button id="search-nearby" class="location-button" type="button">⌕ Chercher des lieux</button><span id="map-status" class="map-status">Déplace la carte puis lance une recherche de lieux.</span></div>
+      <div id="nearby-results" class="nearby-results" aria-live="polite"></div>
+      <section class="map-transport" aria-labelledby="map-transport-title">
+        <h3 id="map-transport-title">Comment aller à l'endroit choisi ?</h3>
+        <p id="map-destination-label">Appuie sur un point de la carte pour choisir ta destination.</p>
+        <div class="transport-grid">
+          <a id="map-uber" class="transport-link" target="_blank" rel="noopener">🚗 Uber</a>
+          <a id="map-taxi" class="transport-link" target="_blank" rel="noopener">🚕 Taxi</a>
+          <a id="map-transit" class="transport-link" target="_blank" rel="noopener">🚆 Train / bus / tram</a>
+          <a id="map-car" class="transport-link" target="_blank" rel="noopener">🧭 Voiture</a>
+          <a id="map-walk" class="transport-link" target="_blank" rel="noopener">🚶 À pied</a>
+        </div>
+        <p class="transport-note">Les liens ouvrent des services externes. Les disponibilités, tarifs et horaires sont confirmés par les prestataires. SORTIR ne commande pas encore de course.</p>
+      </section>
+      <aside class="ad-slot" aria-label="Emplacement publicitaire partenaire">
+        <div class="ad-label">EMPLACEMENT PARTENAIRE · EXEMPLE</div>
+        <div class="ad-content"><span class="ad-symbol">✦</span><div><strong>Votre établissement ou votre marque ici</strong><p>Une visibilité discrète auprès des personnes qui préparent leurs sorties.</p></div><span class="ad-tag">Local ou national</span></div>
+      </aside>
+      <p class="note">Les lieux trouvés proviennent d’OpenStreetMap. Les informations peuvent être incomplètes ou anciennes : vérifie les détails avant de te déplacer.</p>
+    </section>
+
+    <section class="section">
+      <div class="section-heading"><h2 data-i18n="ideas">Quelques idées</h2><span class="count" id="count"></span></div>
+      <div id="activity-list" class="activity-list"></div>
+      <p id="empty" class="empty" hidden data-i18n="empty">Aucun résultat. Essaie une autre recherche.</p>
+    </section>
+
+    <section class="pro-banner">
+      <div><span class="pro-icon">✦</span><h2 data-i18n="proTitle">Vous êtes un professionnel&nbsp;?</h2>
+      <p data-i18n="proText">Présentez votre activité aux personnes qui cherchent quoi faire près de chez elles.</p></div>
+      <a href="mailto:bonjour@sortir.example" class="button" data-i18n="proCta">Découvrir l'espace pro</a>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Navigation principale">
+    <button class="nav-item selected"><span>⌖</span><small data-i18n="navExplore">Explorer</small></button>
+    <button class="nav-item" data-message="La communauté sera ajoutée dans une prochaine étape."><span>♡</span><small data-i18n="navCommunity">Communauté</small></button>
+    <button class="nav-item" data-message="Tes favoris seront disponibles avec ton compte."><span>♥</span><small data-i18n="navFavorites">Favoris</small></button>
+    <button class="nav-item" data-message="La création de compte sera connectée dans la prochaine version."><span>☻</span><small data-i18n="navProfile">Profil</small></button>
+  </nav>
+  <section id="detail" class="detail-overlay" hidden aria-modal="true" role="dialog" aria-labelledby="detail-title">
+    <div class="detail-panel">
+      <button id="detail-close" class="detail-close" type="button" aria-label="Fermer">✕</button>
+      <div id="detail-visual" class="detail-visual" aria-hidden="true">✨</div>
+      <span id="detail-category" class="detail-category"></span>
+      <h2 id="detail-title"></h2>
+      <p id="detail-description" class="detail-description"></p>
+      <div class="detail-facts"><div><small id="address-label">Adresse</small><strong id="detail-address"></strong></div><div><small id="price-label">Tarif</small><strong id="detail-price"></strong></div></div>
+      <p id="detail-demo" class="detail-demo"></p>
+      <section class="transport-section" aria-labelledby="transport-title">
+        <h3 id="transport-title">Comment s’y rendre ?</h3>
+        <p>Choisis un moyen de transport pour préparer ton trajet vers cette activité.</p>
+        <div class="transport-grid">
+          <a id="transport-uber" class="transport-link" target="_blank" rel="noopener">🚗 Uber</a>
+          <a id="transport-taxi" class="transport-link" target="_blank" rel="noopener">🚕 Trouver un taxi</a>
+          <a id="transport-transit" class="transport-link" target="_blank" rel="noopener">🚆 Train / bus / tram</a>
+          <a id="transport-car" class="transport-link" target="_blank" rel="noopener">🧭 Voiture</a>
+          <a id="transport-walk" class="transport-link" target="_blank" rel="noopener">🚶 À pied</a>
+        </div>
+        <p class="transport-note">Ces liens ouvrent des services externes. La disponibilité, les horaires et les prix sont confirmés par le prestataire. Aucune course n’est commandée directement par SORTIR pour le moment.</p>
+      </section>
+      <button id="detail-back" class="detail-back" type="button">Retour aux idées</button>
+    </div>
+  </section>
+  <div id="toast" role="status" class="toast" aria-live="polite"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="app.js"></script>
+</body>
+</html>
